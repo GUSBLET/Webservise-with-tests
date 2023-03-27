@@ -1,0 +1,23 @@
+﻿@model Domain.ViewModels.Account.LoginViewModel
+@{
+    ViewBag.TitlePage = "Login";
+}
+
+
+@using (Html.BeginForm("Login", "Account", FormMethod.Post))
+{
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-field">
+        <label asp-for="Email" for="exampleInputEmail1" class="form-label"></label>
+        <input asp-for="Email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    </div>
+    <div class="form-field">
+        <label asp-for="Password" for="exampleInputPassword1" class="form-label"></label>
+        <input asp-for="Password" class="form-control" id="exampleInputPassword1">
+        <a asp-action="ResetPasswordRequist" asp-controller="Account">Reset password</a>
+    </div>
+    <div class="form-field">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+}

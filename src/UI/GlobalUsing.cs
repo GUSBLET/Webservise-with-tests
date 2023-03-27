@@ -1,1 +1,14 @@
 ﻿global using Microsoft.AspNetCore.Mvc;
+global using DataAccessLayer.EntityFramework;
+global using Microsoft.EntityFrameworkCore;
+global using UI;
+global using DataAccessLayer.Interfaces;
+global using DataAccessLayer.Repositories;
+global using Domain.Entities;
+global using BusinessLogicLayer.Interfaces;
+global using BusinessLogicLayer.Services;
+global using Microsoft.AspNetCore.Authentication.Cookies;
+global using Domain.ViewModels.Account;
+global using Microsoft.AspNetCore.Authentication;
+global using System.Net;
+global using System.Security.Claims;

@@ -1,0 +1,25 @@
+﻿@model Domain.ViewModels.Account.RegistrationViewModel
+@{
+    ViewBag.TitlePage = "Registration";
+}
+
+@using (Html.BeginForm("Registration", "Account", FormMethod.Post))
+{
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-field">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" aria-describedby="emailHelp" />
+    </div>
+    <div class="form-field">
+        <label asp-for="Password" class="form-label"></label>
+        <input asp-for="Password" class="form-control" aria-describedby="passwordHelp" />
+    </div>
+    <div class="form-field">
+        <label asp-for="PasswordConfirm" class="form-label"></label>
+        <input asp-for="PasswordConfirm" class="form-control" />
+    </div>
+    <div class="form-field">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+}
