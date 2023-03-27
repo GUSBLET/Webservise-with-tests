@@ -8,6 +8,6 @@ public class Profile
     public byte[] Avatar { get; set; }
     public int UserId { get; set; }
     public virtual User User { get; set; }
-    public ICollection<ImprovingData> ImprovingDatas { get; set; }
-    public ICollection<ProfileTest> ProfileTests { get; set; }    
+    public ICollection<ProfileImprovingData> ProfileImprovingDatas { get; set; }
+    public ICollection<ProfileTest> ProfileTests { get; set; }
 }

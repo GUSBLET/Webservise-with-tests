@@ -8,6 +8,13 @@ builder.Services.AddControllersWithViews();
 builder.Services.InitializeRepositories();
 builder.Services.InitializeServices();
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+        options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+    });
+
 var app = builder.Build();
 
 app.UseDeveloperExceptionPage();
@@ -17,11 +24,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Account}/{action=Index}/{Id?}");
+        pattern: "{controller=Home}/{action=Index}/{Id?}");
 });
 
 app.Run();

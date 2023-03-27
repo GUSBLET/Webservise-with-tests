@@ -20,49 +20,53 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<ProfileTest>()
-            .HasKey(tp => new { tp.TestId, tp.ProfileId });
+        modelBuilder.Entity<ProfileImprovingData>(buildAction =>
+        {
+            buildAction
+                .ToTable("ProfileImprovingDataTable");
 
-        modelBuilder.Entity<ProfileTest>()
-            .HasOne(tp => tp.Test)
-            .WithMany(t => t.ProfileTests)
-            .HasForeignKey(tp => tp.TestId);
+            buildAction
+                .HasKey(pi => new { pi.ProfileId, pi.ImprovingDataId });
 
-        modelBuilder.Entity<ProfileTest>()
-            .HasOne(tp => tp.Profile)
-            .WithMany(p => p.ProfileTests)
-            .HasForeignKey(tp => tp.ProfileId);
+            buildAction
+                .HasOne(pi => pi.Profile)
+                .WithMany(p => p.ProfileImprovingDatas)
+                .HasForeignKey(pi => pi.ProfileId)
+                .OnDelete(DeleteBehavior.NoAction);
 
-        modelBuilder.Entity<ProfileTest>()
-            .Property(x => x.TestResult)
+            buildAction
+                .HasOne(pi => pi.ImprovingData)
+                .WithMany(i => i.ProfileImprovingDatas)
+                .HasForeignKey(pi => pi.ImprovingDataId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<ProfileTest>(buildAction =>
+        {
+            buildAction
+                .ToTable("ProfileTestTable");
+
+            buildAction
+                .HasKey(x => new { x.ProfileId, x.TestId });
+
+            buildAction
+                .HasOne(x => x.Profile)
+                .WithMany(x => x.ProfileTests)
+                .HasForeignKey(x => x.ProfileId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            buildAction
+                .HasOne(x => x.Test)
+                .WithMany(xs => xs.ProfileTests)
+                .HasForeignKey(x => x.TestId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            buildAction
+                .Property(x => x.TestResult)
                 .HasColumnName("TestResult")
                 .HasColumnType("VARCHAR(50)")
                 .IsRequired();
-
-        //modelBuilder.Entity<ProfileTest>(buildAction =>
-        //{
-        //    buildAction
-        //        .ToTable("ProfileTestTable");
-
-        //    buildAction
-        //        .HasKey(x => new { x.ProfileId, x.TestId });
-
-        //    buildAction
-        //        .HasOne(x => x.Profile)
-        //        .WithMany(xs => xs.ProfileTests)
-        //        .HasForeignKey(x => x.ProfileId);
-
-        //    buildAction
-        //        .HasOne(x => x.Test)
-        //        .WithMany(xs => xs.ProfileTests)
-        //        .HasForeignKey(x => x.TestId);
-
-        //    buildAction
-        //        .Property(x => x.TestResult)
-        //        .HasColumnName("TestResult")
-        //        .HasColumnType("VARCHAR(50)")
-        //        .IsRequired();
-        //});
+        });
 
         modelBuilder.Entity<ResultTest>(buildAction =>
         {
@@ -97,7 +101,7 @@ public class ApplicationDbContext : DbContext
 
             buildAction
                 .HasKey(x => x.Id)
-                .HasName("AnswerId");
+                .HasName("ResultId");
 
             buildAction
                 .Property(x => x.Name)
@@ -222,7 +226,7 @@ public class ApplicationDbContext : DbContext
 
             buildAction
                 .HasKey(x => x.Id)
-                .HasName("TestId");
+                .HasName("ProfileId");
 
             buildAction
                 .Property(x => x.FullName)
@@ -233,19 +237,12 @@ public class ApplicationDbContext : DbContext
             buildAction
                 .Property(x => x.Avatar)
                 .HasColumnName("Avatar")
-                .HasColumnType("VARBINARY(MAX)(50)");
-
+                .HasColumnType("VARBINARY(MAX)");
 
             buildAction
                 .Property(x => x.Year)
                 .HasColumnName("Year")
                 .HasConversion<DateOnlyConverter, DateOnlyComparer>();
-
-            buildAction
-                .HasMany(x => x.ImprovingDatas)
-                .WithMany(x => x.Profiles)
-                .UsingEntity(x => x.ToTable("ImprovingDataTest"));
-
         });
 
         modelBuilder.Entity<User>(buildAction =>
@@ -266,7 +263,7 @@ public class ApplicationDbContext : DbContext
             buildAction
                 .Property(x => x.Password)
                 .HasColumnName("Password")
-                .HasColumnType("VARCHAR(40)")
+                .HasColumnType("VARCHAR(MAX)")
                 .IsRequired();
 
             buildAction
@@ -288,10 +285,6 @@ public class ApplicationDbContext : DbContext
                 .IsRequired();
 
             buildAction
-                .HasMany(x => x.ImprovingDatas)
-                .WithOne(x => x.Author);
-
-            buildAction
                 .HasMany(x => x.Tests)
                 .WithOne(x => x.Author);
 
@@ -299,6 +292,10 @@ public class ApplicationDbContext : DbContext
                 .HasOne(x => x.Profile)
                 .WithOne(x => x.User)
                 .HasForeignKey<User>(x => x.ProfileId);
+
+            buildAction
+                .HasMany(x => x.ImprovingDatas)
+                .WithOne(x => x.Author);
         });
     }
 }

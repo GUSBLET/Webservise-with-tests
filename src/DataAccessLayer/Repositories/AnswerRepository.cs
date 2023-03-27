@@ -6,23 +6,44 @@ public class AnswerRepository : IBaseRepository<Answer>
 
     public AnswerRepository(ApplicationDbContext database) => _database = database;
 
-    public Task<bool> Add(Answer entity)
+    public async Task<bool> Add(Answer entity)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _database.Answers.AddAsync(entity);
+            await _database.SaveChangesAsync();
+        }
+        catch { return await Task.FromResult(false); }
+
+        return await Task.FromResult(true);
     }
 
-    public Task<bool> Delete(Answer entity)
+    public async Task<bool> Delete(Answer entity)
     {
-        throw new NotImplementedException();
+        try
+        {
+            _database.Answers.Remove(entity);
+            await _database.SaveChangesAsync();
+        }
+        catch { return await Task.FromResult(false); }
+
+        return await Task.FromResult(true);
     }
 
     public IQueryable<Answer> Select()
     {
-        throw new NotImplementedException();
+        return _database.Answers;
     }
 
-    public Task<bool> Update(Answer entity)
+    public async Task<bool> Update(Answer entity)
     {
-        throw new NotImplementedException();
+        try
+        {
+            _database.Answers.Update(entity);
+            await _database.SaveChangesAsync();
+        }
+        catch { return await Task.FromResult(false); }
+
+        return await Task.FromResult(true);
     }
 }

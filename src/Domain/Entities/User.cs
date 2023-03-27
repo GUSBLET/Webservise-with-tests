@@ -11,5 +11,6 @@ public class User
     public int ProfileId { get; set; }
     public virtual Profile Profile { get; set; }
     public ICollection<Test> Tests { get; set; }
+    public ICollection<ProfileImprovingData> ProfileImprovingDatas { get; set; }
     public ICollection<ImprovingData> ImprovingDatas { get; set; }
 }
