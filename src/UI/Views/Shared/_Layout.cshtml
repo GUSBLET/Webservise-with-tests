@@ -4,11 +4,7 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
-    <link href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" type="text/css" rel='stylesheet' />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/jquery.inputmask.min.js">
-    </script>
 </head>
 <body>
     <header>
@@ -23,7 +19,19 @@
                         @if (User.IsInRole("User"))
                         {
                             <li class="nav-item">
-                                @*<a class="nav-link" asp-action="Service" asp-controller="Home">@SharedLocalizer["NavBarAppointmentCreateButton"]</a>*@
+                                <a class="nav-link" asp-action="ViewList" asp-controller="ImprovingData"></a>
+                            </li>
+                        }
+                        else if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Improving data panel
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" asp-controller="AccountControl" asp-action="">-----</a></li>
+                                    <li><a class="dropdown-item" asp-controller="AccountControl" asp-action="">-----</a></li>
+                                </ul>
                             </li>
                         }
                         @if (User.Identity.IsAuthenticated)
@@ -33,6 +41,24 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-action="Logout" asp-controller="Account">Logout</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Improving data panel
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" asp-controller="ImprovingData" asp-action="AddNewImprovingData">Add new improving data</a></li>
+                                    <li><a class="dropdown-item" asp-controller="ImprovingData" asp-action="ViewList">View improving datas</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Tests panel
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" asp-controller="Test" asp-action="AddNewImprovingData">Add new test</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Test" asp-action="ViewList">View tests</a></li>
+                                </ul>
                             </li>
                         }
                         else
@@ -69,6 +95,6 @@
             </div>
         </div>
     </div>
-    <script scr="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </body>
 </html>

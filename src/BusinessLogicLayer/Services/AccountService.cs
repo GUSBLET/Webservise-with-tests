@@ -62,16 +62,6 @@ public class AccountService : IAccountService
             throw;
         }
     }
-    private ClaimsIdentity Authenticate(AuthorizationModelDTO user)
-    {
-        var claims = new List<Claim>
-            {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.ToString())
-            };
-        return new ClaimsIdentity(claims, "ApplicationCookie",
-            ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-    }
 
     public Task<HttpResponseMessage> LogoutAsync()
     {
@@ -138,6 +128,84 @@ public class AccountService : IAccountService
         }
     }
 
+    public async Task<HttpStatusCode> ConfirmEmailAsync(int id, string code)
+    {
+        try
+        {
+            var user = await (from p in _userRepository.Select()
+                              where p.Id == id
+                              select p).FirstOrDefaultAsync();
+
+            if (user == null || user.EmailConfirmedToken.ToString() != code)
+                return HttpStatusCode.BadRequest;
+
+            if (user.Id == id && user.EmailConfirmedToken.ToString() == code)
+            {
+                user.EmailConfirmed = true;
+                if (await _userRepository.Update(user))
+                    return HttpStatusCode.OK;
+            }
+
+            return HttpStatusCode.BadRequest;
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
+    public async Task<BaseResponse<User>> SendResetPasswordCodeAsync(SendResetPasswordRequistViewModel model)
+    {
+        try
+        {
+            var user = await GetDataForMailByEmailAsync(model.Email);
+            if (user is null)
+                return new BaseResponse<User>
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Description = "User dosen't exist"
+                };
+
+            return new BaseResponse<User>()
+            {
+                StatusCode = HttpStatusCode.OK,
+                Data = user
+            };
+            
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
+    public async Task<HttpStatusCode> ResetPasswordAsync(int id, string password)
+    {
+        try
+        {
+            var user = await (from p in _userRepository.Select()
+                        where p.Id == id
+                        select p).FirstOrDefaultAsync();
+            if (user is null)
+                return HttpStatusCode.BadRequest;
+            
+            if(MaskPassword(password))
+            {
+                user.Password = HashPasswordHelper.HashPassowrd(password);
+                if(await _userRepository.Update(user))
+                    return HttpStatusCode.OK;
+            }
+            return HttpStatusCode.BadRequest;
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
     public async Task<User> GetDataForMailByEmailAsync(string email)
     {
         try
@@ -171,30 +239,15 @@ public class AccountService : IAccountService
         return false;
     }
 
-    public async Task<HttpStatusCode> ConfirmEmailAsync(int id, string code)
+    private ClaimsIdentity Authenticate(AuthorizationModelDTO user)
     {
-        try
-        {
-            var user = await (from p in _userRepository.Select()
-                        where p.Id == id
-                        select p).FirstOrDefaultAsync();
-
-            if (user == null || user.EmailConfirmedToken.ToString() != code)
-                return HttpStatusCode.BadRequest;
-
-            if(user.Id == id && user.EmailConfirmedToken.ToString() == code)
+        var claims = new List<Claim>
             {
-                user.EmailConfirmed = true;
-                if(await _userRepository.Update(user))
-                    return HttpStatusCode.OK;
-            }
-
-            return HttpStatusCode.BadRequest;
-        }
-        catch (Exception)
-        {
-
-            throw;
-        }
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.ToString())
+            };
+        return new ClaimsIdentity(claims, "ApplicationCookie",
+            ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
     }
+
 }

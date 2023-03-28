@@ -13,11 +13,13 @@ public static class Initializer
         services.AddScoped<IBaseRepository<Result>, ResultRepository>();
         services.AddScoped<IBaseRepository<ResultTest>, ResultTestRepository>();
         services.AddScoped<IBaseRepository<Test>, TestRepository>();
+        services.AddScoped<IBaseRepository<ProfileImprovingData>, ProfileImprovingDataRepository>();
     }
 
     public static void InitializeServices(this IServiceCollection services)
     {
         services.AddSingleton<IMailService, MailService>();
         services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<IImprovingDataService, ImprovingDataService>();
     }
 }

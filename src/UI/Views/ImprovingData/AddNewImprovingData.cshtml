@@ -1,0 +1,29 @@
+﻿@model Domain.ViewModels.ImprovingData.AddNewImprovingDataViewModel
+@{
+    
+}
+@using (Html.BeginForm("AddNewImprovingData", "ImprovingData", FormMethod.Post))
+{
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-field">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" placeholder="Enter name of program" required>
+    </div>
+    <div class="form-field">
+        <label class="form-label" asp-for="Description"></label>
+        <textarea class="form-control" asp-for="Description" placeholder="Enter description"></textarea>
+        <div class="invalid-feedback">
+            Please enter a description.
+        </div>
+    </div>
+    <div class="form-field">
+        <label class="form-label" asp-for="Information"></label>
+        <textarea class="form-control" asp-for="Information" placeholder="Enter information"></textarea>
+        <div class="invalid-feedback">
+            Please enter a information.
+        </div>
+    </div>
+    <div class="form-field">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+}

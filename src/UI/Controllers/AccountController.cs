@@ -1,6 +1,4 @@
-﻿using Domain.Entities;
-
-namespace UI.Controllers;
+﻿namespace UI.Controllers;
 
 public class AccountController : Controller
 {
@@ -38,6 +36,58 @@ public class AccountController : Controller
             ModelState.AddModelError("", response.Description);
         }
         return View(model);
+    }
+
+    [HttpGet]
+    public IActionResult SendResetPasswordRequist()
+    {
+        return View();
+    }
+    [HttpPost]
+    public async Task<IActionResult> SendResetPasswordRequist(SendResetPasswordRequistViewModel model)
+    {
+        if(ModelState.IsValid)
+        {
+            var result = await _accountService.SendResetPasswordCodeAsync(model);
+            if(result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                ModelState.AddModelError("", result.Description);
+                return View(model);
+            }
+
+            string emailConfirmationUrl = Url.Action(
+                    "ResetPassword",
+                    "Account",
+                    new { userId = result.Data.Id, code = result.Data.EmailConfirmedToken.ToString() },
+                    protocol: HttpContext.Request.Scheme);
+            await _mailService.SendEmailAsync(model.Email, "Reset your password", emailConfirmationUrl);
+
+            return View("Success", "Check your email for reset password message");
+        }
+        return View();
+    }
+
+    [HttpGet]
+    public IActionResult ResetPassword(ulong userId)
+    {
+        ViewBag.Id = userId;
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+    {
+        ViewBag.Id = model.Id;
+        if (ModelState.IsValid)
+        {
+            var response = await _accountService.ResetPasswordAsync(model.Id, model.Password);
+            if (response == HttpStatusCode.OK)
+                return View("Success", "Password have been changed");
+            if (response == HttpStatusCode.BadRequest)
+                return View("Error", "User dosen't exist");
+            ModelState.AddModelError("", "Password has to contain chars and numbers");
+        }
+        return View();
     }
 
     [HttpGet]
