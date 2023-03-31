@@ -1,4 +1,7 @@
-﻿namespace UI.Controllers;
+﻿using Azure;
+using Domain.Responses;
+
+namespace UI.Controllers;
 
 public class AccountController : Controller
 {
@@ -14,9 +17,89 @@ public class AccountController : Controller
     }
 
     [HttpGet]
+    [Authorize(Roles = "Admin, Manager")]
+    public async Task<IActionResult> AccountPanel()
+    {
+        var result = await _accountService.GetListOfUsersAsync();
+        return View(result.Data);
+    }
+
+    [HttpGet]
+    [Authorize(Roles = "Admin, Manager")]
+    public async Task<IActionResult> GetUserCard(int Id)
+    {
+        var result = await _accountService.GetUserByIdAsync(Id);
+        return PartialView("GetUserCard", result);
+    }
+
+    [HttpGet]
+    [Authorize(Roles = "Admin, Manager")]
+    public async Task<IActionResult> GetDelete(int Id)
+    {
+        var result = await _accountService.GetUserByIdAsync(Id);
+        return PartialView("GetDelete", result.Id);
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "Admin, Manager")]
+    public async Task<IActionResult> DeleteUser(int id)
+    {
+        HttpStatusCode result = HttpStatusCode.BadRequest;
+        if (User.IsInRole("Admin"))
+            result = await _accountService.DeleteAdminAsync(id);
+        else if (User.IsInRole("Manager"))
+            result = await _accountService.DeleteManagerAsync(id);
+
+        if (result == HttpStatusCode.OK)
+        {
+            return RedirectToAction("UserManagement", "AdminPanel");
+        }
+        
+        return View("Error", result.ToString());
+
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "Admin, Manager")]
+    public async Task<IActionResult> ChangingRole(User user)
+    {
+        HttpStatusCode result = HttpStatusCode.BadRequest;
+        if (User.IsInRole("Admin"))
+            result = await _accountService.UpdateAdminRoleAsync(user);
+        else if (User.IsInRole("Manager"))
+            result = await _accountService.UpdateManagerRoleAsync(user);
+
+        if (result == HttpStatusCode.OK)
+        {
+            return RedirectToAction("AccountPanel", "Account");
+        }
+        else
+        return View("Error", result.ToString());
+
+    }
+
+    [HttpGet]
     public IActionResult Login()
     {
         return View();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Profile()
+    {
+        var result = await _accountService.GetProfileByEmailAsync(User.Identity.Name);
+
+        return View(result);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UpdateProfile(ProfileViewModel model)
+    {
+        var result = await _accountService.UpdateProfileAsync(model);
+        if (HttpStatusCode.OK == result)
+            return RedirectToAction("Profile");
+
+        return View(result);
     }
 
     [HttpPost]

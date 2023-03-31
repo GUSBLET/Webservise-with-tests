@@ -8,4 +8,4 @@
         public string Information { get; set; }
         public User Author { get; set; }
         public ICollection<ProfileImprovingData> ProfileImprovingDatas { get; set; }
-}
+    }

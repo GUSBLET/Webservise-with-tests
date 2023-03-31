@@ -21,5 +21,6 @@ public static class Initializer
         services.AddSingleton<IMailService, MailService>();
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IImprovingDataService, ImprovingDataService>();
+        services.AddScoped<ITestControlService, TestControlService>();
     }
 }

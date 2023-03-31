@@ -13,3 +13,4 @@ global using Microsoft.AspNetCore.Authentication;
 global using System.Net;
 global using System.Security.Claims;
 global using Domain.ViewModels.ImprovingData;
+global using Microsoft.AspNetCore.Authorization;
