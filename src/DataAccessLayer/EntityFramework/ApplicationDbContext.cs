@@ -8,6 +8,7 @@ public class ApplicationDbContext : DbContext
         Database.EnsureCreated();
     }
 
+    public DbSet<ProfileImprovingData> ProfileImprovingDatas { get; set; }
     public DbSet<Answer> Answers { get; set; }
     public DbSet<ImprovingData> ImprovingDatas { get; set; }
     public DbSet<Profile> Profiles { get; set; }
@@ -17,6 +18,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<ResultTest> ResultTest { get; set; }
     public DbSet<Test> Tests { get; set; }
     public DbSet<User> Users { get; set; }
+    
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

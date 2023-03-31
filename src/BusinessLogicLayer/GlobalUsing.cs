@@ -11,3 +11,6 @@ global using Microsoft.EntityFrameworkCore;
 global using Domain.Enums;
 global using MailKit.Net.Smtp;
 global using MimeKit;
+global using Domain.ViewModels.ImprovingData;
+global using Domain.ViewModels.Test;
+global using Microsoft.AspNetCore.Http;

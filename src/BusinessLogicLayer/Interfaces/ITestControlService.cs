@@ -2,4 +2,5 @@
 
 public interface ITestControlService
 {
+    public Task<BaseResponse<List<ViewListTestViewModel>>> GetDataAsync();
 }

@@ -1,0 +1,28 @@
+﻿@using Domain.Enums
+@model Domain.Entities.User
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<form class="row g-3" asp-action="ChangingRole" asp-controller="Account" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input asp-for="Id" value="@Model.Id" />
+    <div class="col-md-12">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" type="email" class="form-control" readonly>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="Profile.FullName" class="form-label"></label>
+        <input asp-for="Profile.FullName" type="text" class="form-control" readonly>
+    </div>
+    <div class="col-12">
+        <label class="visually-hidden" for="specificSizeSelect">Preference</label>
+        <select asp-for="@Model.Role" asp-items="Html.GetEnumSelectList<Role>()" class="form-select">
+            <option value="@Model.Role">@Model.Role</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Send</button>
+    </div>
+</form>

@@ -1,0 +1,24 @@
+﻿@model List<Domain.ViewModels.ImprovingData.ViewListImprovingDataViewModel>
+@{
+}
+<div class="row">
+    @if (Model is null)
+    {
+        <h3 style="align-content:center">List is empty</h3>
+    }
+    else
+    {
+        @foreach (var item in Model)
+        {
+            <div class="card form-field" style="width: 24rem;  ">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Title</h5>
+                    <p class="card-text">Description:@item.Description</p>
+                    <p class="card-text">Author:@item.Author.Email</p>
+                    <a href="@Url.Action("ViewImprovingData", "ImprovingData", new {Id = item.Id})" class="btn btn-primary">View</a>
+                </div>
+            </div>
+        }    
+    }
+    
+</div>

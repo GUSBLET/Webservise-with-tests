@@ -1,0 +1,41 @@
+﻿@model List<Domain.Entities.User>
+@{
+}
+<div class="table">
+    <table id="myTable" class="table table-bordered table-hover table-sm">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>View</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model != null)
+                {
+                    foreach (var Data in Model)
+                    {
+                        <tr>
+                            <td>@Data.Id</td>
+                            <td>@Data.Email</td>
+                            <td>@Data.Role</td>
+                            <td>
+                                <button type="submit" class="btn btn-sm btn-primary" onclick="openModal({ url: '@Url.Action("GetUserCard", "Account")', data: @Data.Id })">
+                                    Show
+                                </button>
+                            </td>
+                            <td>
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="openModal({ url: '@Url.Action("GetDelete", "Account")', data: @Data.Id })">
+                                    Remove
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>

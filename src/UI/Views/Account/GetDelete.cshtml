@@ -1,0 +1,9 @@
+﻿@model int
+@{
+}
+<form method="post" asp-action="DeleteUser" asp-controller="Account">
+    <p>Are you sure you want to delete?</p>
+    <input name="id" value="@Model" hidden/>
+    <button type="submit" class="btn btn-success">Cancel</button>
+    <button type="button" class="btn btn-danger" data-dismiss="modal">Remove</button>
+</form>

@@ -1,0 +1,100 @@
+﻿@model Domain.ViewModels.Account.ProfileViewModel
+@{
+    string day;
+    string month;
+    if (Model.Year.Day < 10)
+        day = "0" + Model.Year.Day;
+    else
+        day = Model.Year.Day.ToString();
+    if (Model.Year.Month < 10)
+        month = "0" + Model.Year.Month;
+    else
+        month = Model.Year.Month.ToString();
+
+    string dateFilter = $"{Model.Year.Year}-{month}-{day}";
+    string emptyLine = "empty";
+    string space = ", ";
+}
+<section class="bg-light" id="ViewOfItem">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 mb-4 mb-sm-5">
+                <div class="card card-style1 border-0">
+                    <div class="card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6 mb-4 mb-lg-0">
+                            <img src="data:image/png;base64, @Convert.ToBase64String(Model.AvatarShow)" alt="...">
+                            </div>
+                            <div class="col-lg-6 px-xl-10">
+                                <div class="bg-secondary d-lg-inline-block py-1-9 px-1-9 px-sm-6 mb-1-9 rounded">
+                                    <h3 class="h2 text-white mb-0">@Model.FullName</h3>
+                                    <span class="text-primary">@Model.User.Role</span>
+                                </div>
+                                <ul class="list-unstyled mb-1-9">
+                                    <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600">Email:</span> @Model.User.Email</li>
+                                    <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600">Data of birthday:</span> @Model.Year</li>
+                                    <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600">Tests passed: </span>
+                                    @if (Model.Test != null || Model.Test.Count >= 0)
+                                    {
+                                        foreach (var item in Model.Test)
+                                        {
+                                            @item.Name @space
+                                        }                                        
+                                    }                                    
+                                    else
+                                    {
+                                         @emptyLine   
+                                    }
+                                    </li>
+                                    <li class="mb-2 mb-xl-3 display-28">
+                                        <span class="display-26 text-secondary me-2 font-weight-600">Improving datas passed: </span>
+                                    @if (Model.ImprovingDatas != null || Model.ImprovingDatas.Count >= 0)
+                                    {
+                                        @foreach (var item in Model.ImprovingDatas)
+                                        {
+                                            @item.Title @space
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @emptyLine
+                                    }
+                                    </li>
+                                </ul>
+                                <ul class="social-icon-style1 list-unstyled mb-0 ps-0">
+                                    <li><a href="#!"><i class="ti-twitter-alt"></i></a></li>
+                                    <li><a href="#!"><i class="ti-facebook"></i></a></li>
+                                    <li><a href="#!"><i class="ti-pinterest"></i></a></li>
+                                    <li><a href="#!"><i class="ti-instagram"></i></a></li>
+                                </ul>
+                                <button class="btn btn-primary" onclick="ChangingMode()">Changing mode</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div id="UpdateItem" style="display: none;">
+    <form class="was-validated" name="adding" asp-controller="Account" asp-action="UpdateProfile" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input asp-for="Id" value="@Model.Id" class="form-control" hidden>
+            <div class="form-field">
+                <label asp-for="FullName"></label>
+                <input asp-for="FullName" class="form-control" placeholder="Enter name of program" required>
+            </div>
+            <div class="form-field">
+                <label asp-for="Year"></label>
+                <input asp-for="Year" type="date" class="form-control" min="1900-01-01" value="@dateFilter">
+            </div>
+            <div class="form-field">
+                <input type="file" asp-for="Avatar" class="form-control" aria-label="file example" accept=".png,.jpg,.JPG">
+                <div class="invalid-feedback">Example invalid form file feedback</div>
+            </div>
+            <div class="form-field">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button class="btn btn-primary" onclick="ChangingMode()" type="button">Changing mode</button>
+            </div>
+    </form>
+</div>
