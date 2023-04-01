@@ -1,0 +1,20 @@
+﻿@model Domain.ViewModels.Test.ContWindowViewModel
+@{
+}   
+@using (Html.BeginForm("Check", "Test", FormMethod.Post))
+{
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <h3 style="text-align:center">One more action</h3>
+        <div class="form-field">
+            <label asp-for="Cont">Yes</label>
+            <input class="form-check-input" type="radio" value="Yes" asp-for="Cont">
+        </div>
+        <div class="form-field">
+            <label asp-for="Cont">no</label>
+            <input class="form-check-input" type="radio" value="No" asp-for="Cont">
+        </div>
+
+        <div class="form-field">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+}

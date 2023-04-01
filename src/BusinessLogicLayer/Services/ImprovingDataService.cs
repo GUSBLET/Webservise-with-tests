@@ -1,4 +1,6 @@
-﻿namespace BusinessLogicLayer.Services;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace BusinessLogicLayer.Services;
 
 public class ImprovingDataService : IImprovingDataService
 {
@@ -113,9 +115,16 @@ public class ImprovingDataService : IImprovingDataService
                 ProfileId = profile.Id,
                 ImprovingDataId = dataId
             };
-            if(await _profileImprovingDatasRepository.Add(data))
-                return HttpStatusCode.OK;
-            return HttpStatusCode.BadRequest;
+            var re = await _profileImprovingDatasRepository.Select()
+                .Where(x => x.ImprovingDataId == dataId && x.ProfileId == profile.Id)
+                .FirstOrDefaultAsync();
+            if (re == null)
+            {
+                if (await _profileImprovingDatasRepository.Add(data))
+                    return HttpStatusCode.OK;
+                return HttpStatusCode.BadRequest;
+            }
+            return HttpStatusCode.OK;
         }
         catch (Exception)
         {

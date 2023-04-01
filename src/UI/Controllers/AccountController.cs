@@ -50,6 +50,7 @@ public class AccountController : Controller
         else if (User.IsInRole("Manager"))
             result = await _accountService.DeleteManagerAsync(id);
 
+
         if (result == HttpStatusCode.OK)
         {
             return RedirectToAction("UserManagement", "AdminPanel");
