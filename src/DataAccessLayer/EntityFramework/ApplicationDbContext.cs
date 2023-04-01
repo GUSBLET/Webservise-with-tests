@@ -1,4 +1,6 @@
-﻿namespace DataAccessLayer.EntityFramework;
+﻿using Domain.Helpers;
+
+namespace DataAccessLayer.EntityFramework;
 
 public class ApplicationDbContext : DbContext
 {
@@ -196,8 +198,8 @@ public class ApplicationDbContext : DbContext
                 .HasName("TestId");
 
             buildAction
-                .Property(x => x.Name)
-                .HasColumnName("Name")
+                .Property(x => x.Title)
+                .HasColumnName("Title")
                 .HasColumnType("VARCHAR(50)")
                 .IsRequired();
 
@@ -245,6 +247,15 @@ public class ApplicationDbContext : DbContext
                 .Property(x => x.Year)
                 .HasColumnName("Year")
                 .HasConversion<DateOnlyConverter, DateOnlyComparer>();
+
+            buildAction.HasData(new Profile
+            {
+                FullName = "Name",
+                Avatar = new byte[0],
+                Year = DateOnly.MinValue,
+                UserId = 1,
+                Id = 1
+            });
         });
 
         modelBuilder.Entity<User>(buildAction =>
@@ -298,6 +309,17 @@ public class ApplicationDbContext : DbContext
             buildAction
                 .HasMany(x => x.ImprovingDatas)
                 .WithOne(x => x.Author);
+
+            buildAction.HasData(new User
+            {
+                Id = 1,
+                Email = "denyschk@gmail.com",
+                Password = HashPasswordHelper.HashPassowrd("12345678"),
+                EmailConfirmed = true,
+                EmailConfirmedToken = Guid.NewGuid(),
+                Role = Domain.Enums.Role.Admin,
+                ProfileId = 1
+            });
         });
     }
 }

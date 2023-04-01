@@ -12,8 +12,9 @@ public class QuestionRepository : IBaseRepository<Question>
         {
             await _database.Questions.AddAsync(entity);
             await _database.SaveChangesAsync();
-        }
-        catch { return await Task.FromResult(false); }
+    }
+        catch { return await Task.FromResult(false);
+}
 
         return await Task.FromResult(true);
     }

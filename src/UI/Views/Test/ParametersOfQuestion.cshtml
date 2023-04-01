@@ -1,0 +1,14 @@
+﻿@model Domain.ViewModels.Test.ParametersOfQuestionViewModel
+@{
+}
+@using (Html.BeginForm("AddNewQuestion", "Test", FormMethod.Get))
+{
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-field">
+        <label asp-for="CountOfAnswer">Count of answer</label>
+        <input asp-for="CountOfAnswer" min="2" max="5" type="number" class="form-control" required>
+    </div>
+    <div class="form-field">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+}
