@@ -1,4 +1,4 @@
-﻿using DataAccessLayer.Repositories;
+﻿using System.Collections.Generic;
 
 namespace BusinessLogicLayer.Services;
 
@@ -93,6 +93,43 @@ public class TestControlService : ITestControlService
         }
     }
 
+    public async Task<BaseResponse<bool>> AddNewResultAsync(AddNewResultViewModel model)
+    {
+        try
+        {
+            var result = new Result
+            {
+                Name = model.Result
+            };
+            await _resultRepository.Add(result);
+            result = await _resultRepository.Select().Where(x => x.Name == model.Result).FirstOrDefaultAsync();
+            var test = await _testRepository.Select().Where(x => x.Title == model.testTitle).FirstOrDefaultAsync();
+            var testResult = new ResultTest
+            {
+                MinimumOfDiapason = model.PowerOfResult[0],
+                MaximumOfDiapason = model.PowerOfResult[1],
+                ResultId = result.Id,
+                TestId = test.Id
+            };
+            if (await _resultTestRepository.Add(testResult))
+                return new BaseResponse<bool>
+                {
+                    Data = true
+                };
+
+            return new BaseResponse<bool>
+            {
+                Data = false
+            };
+
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
     public async Task<BaseResponse<bool>> AddNewTestAsync(AddNewTestViewModel model)
     {
         try
@@ -130,6 +167,78 @@ public class TestControlService : ITestControlService
         }
     }
 
+    public async Task<BaseResponse<int>> CountTestResultAsync(ViewTestViewModel model)
+    {
+        try
+        {
+            int count = 0;
+            var test = await _testRepository.Select().Where(x => x.Id == model.TestId).Include(x => x.Questions).FirstOrDefaultAsync();
+            var questionsWithAnswers = new List<Question>();
+            for (int i = 0; i < test.Questions.ToArray().Length; i++)
+            {
+                var question = _questionRepository.Select().Where(x => x.QuestionId == test.Questions.ToArray()[i].QuestionId).Include(x => x.Answers).FirstOrDefault();
+                questionsWithAnswers.Add(question);
+            }
+            test.Questions = questionsWithAnswers;
+            int j = 0;
+            foreach (var item in test.Questions)
+            {
+                var corentTest = test.Questions.Where(x => x.QuestionId == item.QuestionId).FirstOrDefault();
+                if (corentTest.Answers.ToArray()[Convert.ToInt32(model.AnswersChoise[j])].PowerOfAnswer == true)
+                    count++;
+                j++;
+            }
+
+            var value = await _userRepository.Select().Where(x => x.Email == model.Email).FirstOrDefaultAsync();
+
+            var testProfile = new ProfileTest
+            {
+                ProfileId = value.ProfileId,
+                TestId = model.TestId,
+                TestResult = count
+            };
+            var buffer = await _profileTestRepository.Select()
+                .Where(x => x.TestId == model.TestId && x.ProfileId == value.ProfileId)
+                .FirstOrDefaultAsync();
+            if ( buffer is null )
+                await _profileTestRepository.Add(testProfile);
+            else
+            {
+                buffer.TestResult = count;
+                await _profileTestRepository.Update(buffer);
+            }
+
+            var resultOfTest = await _resultTestRepository.Select()
+                .Where(x => x.MaximumOfDiapason <= count && x.MaximumOfDiapason >= count)
+                .FirstOrDefaultAsync();
+
+            if(resultOfTest != null)
+            {
+                var last = await _resultRepository.Select().Where(x => x.Id == resultOfTest.ResultId).FirstOrDefaultAsync();
+                return new BaseResponse<int>
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Data = count,
+                    Description = last.Name
+                };
+            }
+            return new BaseResponse<int>
+            {
+                StatusCode = HttpStatusCode.OK,
+                Data = count,
+                
+            };
+
+
+
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
     public async Task<BaseResponse<List<ViewListTestViewModel>>> GetDataAsync()
     {
         try
@@ -154,6 +263,75 @@ public class TestControlService : ITestControlService
             return new BaseResponse<List<ViewListTestViewModel>>
             {
                 StatusCode = HttpStatusCode.BadRequest
+            };
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
+    public Task<BaseResponse<TestPassingViewModel>> GetTestAsync(int id)
+    {
+        try
+        {
+            return null;
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
+    public async Task<BaseResponse<AddNewResultViewModel>> GetTestForResultPage(string title)
+    {
+        try
+        {
+            var res = await _testRepository.Select().Where(x => x.Title == title).Include(x => x.Questions).FirstOrDefaultAsync();
+            if(res is null)
+                return new BaseResponse<AddNewResultViewModel> { StatusCode = HttpStatusCode.BadRequest };
+            var test = new AddNewResultViewModel()
+            {
+                TestQuestion = res.Questions.Count
+            };
+            return new BaseResponse<AddNewResultViewModel> { StatusCode = HttpStatusCode.OK, Data =  test};
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
+    public async Task<BaseResponse<ViewTestViewModel>> GetTestViewPage(int id)
+    {
+        try
+        {
+            var res = _testRepository.Select().Where(x => x.Id == id)
+                .Include(x => x.Questions).FirstOrDefault();
+            if(res is null)
+                return new BaseResponse<ViewTestViewModel> { StatusCode = HttpStatusCode.BadRequest };
+            var questionsWithAnswers = new List<Question>();
+            for (int i = 0; i < res.Questions.ToArray().Length; i++)
+            {
+                var question = _questionRepository.Select().Where(x => x.QuestionId == res.Questions.ToArray()[i].QuestionId).Include(x => x.Answers).FirstOrDefault();
+                questionsWithAnswers.Add(question);
+            }
+
+            ViewTestViewModel result = new();
+            result.TestId = id;
+            result.Questions = new List<Question>();
+            foreach (var item in res.Questions)
+            {
+                result.Questions.Add(item);
+            }
+
+            return new BaseResponse<ViewTestViewModel> 
+            {
+                StatusCode = HttpStatusCode.OK ,
+                Data = result
             };
         }
         catch (Exception)

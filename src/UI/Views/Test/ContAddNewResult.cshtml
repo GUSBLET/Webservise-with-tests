@@ -1,0 +1,22 @@
+﻿@model Domain.ViewModels.Test.AddNewResultViewModel
+@{
+}
+@using (Html.BeginForm("AddNewResult", "Test", FormMethod.Post))
+{
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-field">
+            <label asp-for="Result">Result</label>
+            <input asp-for="Result" class="form-control" required>
+        </div>
+        <div class="form-field">
+            <label asp-for="PowerOfResult">Min range</label>
+            <input asp-for="PowerOfResult" min="0" max="@Model.TestQuestion" type="number" class="form-control" required>
+        </div>
+        <div class="form-field">
+            <label asp-for="PowerOfResult">Max range</label>
+            <input asp-for="PowerOfResult" min="0" max="@Model.TestQuestion" type="number" class="form-control" required>
+        </div>
+        <div class="form-field">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+}

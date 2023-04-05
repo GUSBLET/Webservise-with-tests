@@ -6,20 +6,28 @@
 
 @using (Html.BeginForm("Login", "Account", FormMethod.Post))
 {
-<div class="container">
-    <div>
+
         <div asp-validation-summary="All" class="text-danger"></div>
-        <h3 id="name">Login</h3>
-        <input
-          placeholder="enter the email"
-          class="centered-element"
-          asp-for="Email" />
-      </div>
-      <div>
-        <h3 id="password_text">Password</h3>
-        <input asp-for="Password" placeholder="enter the password" type="password" id="password" />
-      </div>
-      <button class="button-login">Submit</button>
-</div>
+            <div class="center">
+            <div class="block">
+              <h3 class="plane">Login</h3>
+              <input
+                asp-for="Email" placeholder="enter the email"
+                class="centered-element"
+                type="email"
+              />
+            </div>
+            <div class="block">
+              <h3 class="plane">Password</h3>
+              <input asp-for="Password" class="centered-element"
+                placeholder="enter the password"
+                type="password"
+              />
+            </div>
+            <div class="block" style="margin-top: 10px">
+              <button class="dog">Submit</button>
+            </div>
+          </div>
+
 
 }

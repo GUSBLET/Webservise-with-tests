@@ -84,16 +84,36 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVzdFxBZGROZXdUZXN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Visual Studio/Projects/Webservise-with-tests/src/UI/Views/Test/ContAddNewResult.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVzdFxDb250QWRkTmV3UmVzdWx0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Visual Studio/Projects/Webservise-with-tests/src/UI/Views/Test/ContWindow.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVzdFxDb250V2luZG93LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio/Projects/Webservise-with-tests/src/UI/Views/Test/ContWindowResult.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVzdFxDb250V2luZG93UmVzdWx0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Visual Studio/Projects/Webservise-with-tests/src/UI/Views/Test/ParametersOfQuestion.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVzdFxQYXJhbWV0ZXJzT2ZRdWVzdGlvbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Visual Studio/Projects/Webservise-with-tests/src/UI/Views/Test/ParametersOfResult.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVzdFxQYXJhbWV0ZXJzT2ZSZXN1bHQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio/Projects/Webservise-with-tests/src/UI/Views/Test/ShowResult.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVzdFxTaG93UmVzdWx0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Visual Studio/Projects/Webservise-with-tests/src/UI/Views/Test/ViewList.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVzdFxWaWV3TGlzdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio/Projects/Webservise-with-tests/src/UI/Views/Test/ViewTest.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVzdFxWaWV3VGVzdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Visual Studio/Projects/Webservise-with-tests/src/UI/Views/_ViewImports.cshtml]

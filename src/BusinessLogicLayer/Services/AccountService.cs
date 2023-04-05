@@ -1,6 +1,4 @@
-﻿using Azure;
-
-namespace BusinessLogicLayer.Services;
+﻿namespace BusinessLogicLayer.Services;
 
 public class AccountService : IAccountService
 {
@@ -8,6 +6,7 @@ public class AccountService : IAccountService
     private readonly IBaseRepository<Profile> _profileRepository;
     private readonly IBaseRepository<ProfileImprovingData> _profileImprovingDataRepository;
     private readonly IBaseRepository<ImprovingData> _improvingDataRepository;
+    private readonly IBaseRepository<ProfileTest> _profileTestRepository;
     private readonly IBaseRepository<Test> _testRepository;
 
     public AccountService(
@@ -15,13 +14,15 @@ public class AccountService : IAccountService
         IBaseRepository<Profile> profileRepository,
         IBaseRepository<ProfileImprovingData> profileImprovingDataRepository,
         IBaseRepository<ImprovingData> improvingDataRepository,
-        IBaseRepository<Test> testRepository)
+        IBaseRepository<Test> testRepository,
+        IBaseRepository<ProfileTest> testProfileRepository)
     {
         _userRepository = userRepository;
         _profileRepository = profileRepository;
         _profileImprovingDataRepository = profileImprovingDataRepository;
         _improvingDataRepository = improvingDataRepository;
         _testRepository = testRepository;
+        _profileTestRepository = testProfileRepository;
     }
 
     public async Task<BaseResponse<ClaimsIdentity>> LoginAsync(LoginViewModel model)
@@ -244,6 +245,7 @@ public class AccountService : IAccountService
             var profile = await _profileRepository.Select().Include(x => x.User).FirstOrDefaultAsync();
             
             var profileDataBuffer = _profileRepository.Select().Include(x => x.ProfileImprovingDatas.Where(x => x.ProfileId == profile.Id)).ToList();
+            var testsDataBufffer = await _profileTestRepository.Select().Where(x => x.ProfileId == profile.Id).ToListAsync();
             foreach (var item in profileDataBuffer)
             {
                 if (item.ProfileImprovingDatas != null)
@@ -254,15 +256,11 @@ public class AccountService : IAccountService
                         improvingDatas.Add(datas);
                     }
                 }
-                
-                if(item.ProfileTests != null)
-                {
-                    foreach (var workItem in item.ProfileTests)
-                    {
-                        var datas = await _testRepository.Select().Where(x => x.Id == workItem.TestId).FirstOrDefaultAsync();
-                        tests.Add(datas);
-                    }
-                }
+            }
+            foreach (var item in testsDataBufffer)
+            {
+                var datas = await _testRepository.Select().Where(x => x.Id == item.TestId).FirstOrDefaultAsync();
+                tests.Add(datas);
             }
             
 
