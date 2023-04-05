@@ -1,0 +1,53 @@
+﻿body {
+    background-image: linear-gradient(to right, #c6d4ff, #73ba9b);
+    font-size: 16px;
+}
+
+#login {
+    width: 250px;
+    height: 25px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.centered-element {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#password {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 250px;
+    height: 25px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+#name {
+    position: absolute;
+    left: 41%;
+    top: 36%;
+}
+
+#password_text {
+    position: absolute;
+    left: 41%;
+    top: 46%;
+    color: black;
+}
+
+button {
+    background-color: #c6d4ff;
+    position: absolute;
+    top: 60%;
+    left: 41%;
+    width: 15%;
+    height: 25px;
+    border-radius: 10px;
+    border: 1px solid #73ba9b;
+}

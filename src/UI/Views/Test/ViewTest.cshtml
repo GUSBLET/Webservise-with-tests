@@ -1,0 +1,29 @@
+﻿@model Domain.ViewModels.Test.ViewTestViewModel
+@{
+    int s = 1;
+}
+@using (Html.BeginForm("CountResultOfTest", "Test", FormMethod.Post))
+{
+    <input asp-for="TestId" hidden>
+    <div style="margin-left:20px">
+    @foreach (var item in Model.Questions)
+    {    
+        <div class="form-field">
+            <label>@s question: @Model.Questions.Contains(@item) @item.QuestionText</label>
+            <input asp-for="Questions" hidden>
+        </div>
+        for(int i = 0; i < item.Answers.Count; i++)
+        {
+            <div class="form-field">
+                <label>@i: @item.Answers.ToArray()[i].Name</label>
+            </div>
+                
+        }
+        <input asp-for="AnswersChoise" min="0" max="@item.Answers.Count" type="number" required>
+        s++;
+    }
+    </div>
+    <div style="margin-left:20px" class="form-field">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+}

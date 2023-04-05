@@ -4,13 +4,16 @@
 <div class="row">
     @if (Model is null)
     {
-        <h3 style="text-align:center">List is empty</h3>
+        <div style="vertical-align: middle;">
+            <h3 style="text-align: center;">List is empty</h3>
+        </div>
+        
     }
     else
     {
         @foreach (var item in Model)
         {
-            <div class="card form-field" style="width: 24rem;  ">
+            <div class="card form-field" style="width: 24rem;">
                 <div class="card-body">
                     <h5 class="card-title">@item.Title</h5>
                     <p class="card-text">Description:@item.Description</p>
