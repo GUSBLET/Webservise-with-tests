@@ -170,7 +170,7 @@ public class TestController : Controller
         if (ModelState.IsValid)
         {
             if (model.Cont == "Yes")
-                return RedirectToAction("Co ntAddNewResult");
+                return RedirectToAction("ContAddNewResult");
 
             return View("Success", "Test was added");
         }

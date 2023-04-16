@@ -313,7 +313,7 @@ public class ApplicationDbContext : DbContext
             buildAction.HasData(new User
             {
                 Id = 1,
-                Email = "denyschk@gmail.com",
+                Email = "denyschk@tot.com",
                 Password = HashPasswordHelper.HashPassowrd("12345678"),
                 EmailConfirmed = true,
                 EmailConfirmedToken = Guid.NewGuid(),
