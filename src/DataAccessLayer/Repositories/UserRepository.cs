@@ -8,12 +8,12 @@ public class UserRepository : IBaseRepository<User>
 
     public async Task<bool> Add(User entity)
     {
-        try
-        {
+        //try
+        //{
             await _database.Users.AddAsync(entity);
             await _database.SaveChangesAsync();
-        }
-        catch { return await Task.FromResult(false); }
+        //}
+        //catch { return await Task.FromResult(false); }
 
         return await Task.FromResult(true);
     }

@@ -114,6 +114,7 @@ public class AccountService : IAccountService
                     UserId = lastId,
                 };
                 await _profileRepository.Add(newProfile);
+                
                 if (await _userRepository.Add(newAccount))
                     return new BaseResponse<ClaimsIdentity>()
                     {
